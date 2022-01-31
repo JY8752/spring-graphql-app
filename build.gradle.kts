@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-graphql")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -29,6 +30,9 @@ dependencies {
 	testImplementation("org.springframework:spring-webflux")
 	testImplementation("org.springframework.graphql:spring-graphql-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("io.kotest:kotest-runner-junit5-jvm:5.1.0")
+	testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.0")
+
 }
 
 tasks.withType<KotlinCompile> {
