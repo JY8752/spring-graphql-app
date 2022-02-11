@@ -1,3 +1,6 @@
+db/
+configdb/
+
 HELP.md
 .gradle
 build/
