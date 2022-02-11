@@ -39,6 +39,6 @@ open class TextIndexEntity(
     }
 
     override fun toString(): String {
-        return "TextIndexEntity(textIndexId=$textIndexId, mainText='$mainText', textCount=$textCount, morphologicalAnalysisResults=$morphologicalAnalysisResults)"
+        return "TextIndexEntity(textIndexId=$textIndexId, mainText='$mainText', textCount=$textCount, morphologicalAnalysisResults=${morphologicalAnalysisResults.map { it.morphologicalId }})"
     }
 }

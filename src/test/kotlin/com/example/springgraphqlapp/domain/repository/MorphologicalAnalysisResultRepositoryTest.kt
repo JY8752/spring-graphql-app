@@ -40,4 +40,11 @@ class MorphologicalAnalysisResultRepositoryTest(
             }
         }
     }
+    "findByTextIndex" {
+        morphologicalAnalysisResultRepository.save(morpho)
+        val results = morphologicalAnalysisResultRepository.findByTextIndex(textIndex)
+
+        results.size shouldBe 1L
+        results.forEach { it shouldBe morpho }
+    }
 })

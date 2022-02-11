@@ -4,6 +4,7 @@ import com.example.springgraphqlapp.infrastructure.entity.PageContentEntity
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import org.bson.types.ObjectId
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
@@ -26,8 +27,8 @@ class PageContentRepositoryTest(
      */
     private fun savePageContent(
         url: String,
-        textIndexId: Long? = null,
-        webElementIndexId: Long? = null
+        textIndexId: ObjectId? = null,
+        webElementIndexId: ObjectId? = null
     ) = pageContentRepository.save(PageContentEntity(url = url, textIndexId = textIndexId, webElementIndexId = webElementIndexId))
 
     /**
@@ -43,5 +44,7 @@ class PageContentRepositoryTest(
         pageContent.url shouldBe url
         pageContent.textIndexId shouldBe textIndexId
         pageContent.webElementIndexId shouldBe webElementIndexId
+        pageContent.isError shouldBe false
+        pageContent.errorReason shouldBe null
     }
 }

@@ -9,6 +9,9 @@ data class PageContentEntity(
     @Id
     val contentId: ObjectId = ObjectId.get(),
     val url: String,
-    val textIndexId: Long?,
-    val webElementIndexId: Long?
+    val textIndexId: ObjectId? = null,
+    val webElementIndexId: ObjectId? = null,
+    val isError: Boolean = false,
+    val errorReason: String? = null,
+    val code: Int? = null
 )
