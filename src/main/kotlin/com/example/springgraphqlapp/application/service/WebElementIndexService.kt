@@ -5,6 +5,8 @@ import com.example.springgraphqlapp.application.enum.HtmlTag
 import com.example.springgraphqlapp.application.tool.CustomHtmlParser
 import com.example.springgraphqlapp.domain.repository.ElementRepository
 import com.example.springgraphqlapp.domain.repository.WebElementIndexRepository
+import com.example.springgraphqlapp.generated.types.Element
+import com.example.springgraphqlapp.generated.types.WebElementIndex
 import com.example.springgraphqlapp.infrastructure.entity.ElementEntity
 import com.example.springgraphqlapp.infrastructure.entity.WebElementIndexEntity
 import org.bson.types.ObjectId
@@ -43,5 +45,22 @@ class WebElementIndexService(
         //WebElementIndexレコードを更新する
         webElementIndex.elements = elementEntities
         return webElementIndexRepository.save(webElementIndex).webElementId
+    }
+
+    /**
+     * webElementIndexを取得する
+     */
+    fun getWebElementIndex(id: ObjectId): WebElementIndex {
+        val entity = webElementIndexRepository.findOneByWebElementId(id)
+        return WebElementIndex(
+            id.toString(),
+            entity.elements.map {
+                Element(
+                    it.elementId.toString(),
+                    it.elementTag,
+                    it.count.toInt()
+                )
+            }
+        )
     }
 }

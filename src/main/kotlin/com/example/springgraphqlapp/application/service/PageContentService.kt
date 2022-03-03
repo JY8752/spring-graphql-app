@@ -1,6 +1,7 @@
 package com.example.springgraphqlapp.application.service
 
 import com.example.springgraphqlapp.domain.repository.PageContentRepository
+import com.example.springgraphqlapp.generated.types.PageContent
 import com.example.springgraphqlapp.infrastructure.entity.PageContentEntity
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -104,6 +105,22 @@ class PageContentService(
         }
 
         return contentId!!
+    }
+
+    /**
+     * pageContentを取得する
+     */
+    fun getPageContent(id: ObjectId): PageContent {
+        val entity = pageContentRepository.findOneByContentId(id)
+        return PageContent(
+            entity.contentId.toString(),
+            entity.url,
+            entity.textIndexId?.let { textIndexService.getTextIndex(it) },
+            entity.webElementIndexId?.let { webElementIndexService.getWebElementIndex(it) },
+            entity.isError,
+            entity.errorReason,
+            entity.code
+        )
     }
 
     /**
