@@ -1,0 +1,51 @@
+type Query {
+    pageContent(id: String!): PageContent
+}
+
+type Subscription {
+    stocks: Stock
+}
+
+type Stock {
+    name: String
+    price: Float
+}
+
+type Mutation {
+    
+}
+
+type PageContent {
+    id: String!
+    url: String!
+    textIndex: TextIndex
+    webElementIndex: WebElementIndex
+    isError: Boolean
+    errorReason: String
+    code: Int
+}
+
+type TextIndex {
+    id: String!
+    mainText: String!
+    textCount: Int!
+    morphologicalAnalysisResults: [MorphologicalAnalysisResult!]!
+}
+
+type MorphologicalAnalysisResult {
+    id: String!
+    word: String!
+    partOfSpeech: String!
+    count: Int!
+}
+
+type WebElementIndex {
+    id: String!
+    elements: [Element!]!
+}
+
+type Element {
+    id: String!
+    elementTag: String!
+    count: Int!
+}
