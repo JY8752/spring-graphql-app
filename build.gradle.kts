@@ -1,8 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.*
+import org.gradle.api.tasks.testing.logging.TestLogEvent.*
+
 plugins {
-	id("org.springframework.boot") version "2.7.0-M1"
+	id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
+	id("com.netflix.dgs.codegen") version "5.1.17"
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
 }
@@ -13,22 +17,24 @@ java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
 	mavenCentral()
-	maven { url = uri("https://repo.spring.io/milestone") }
 }
 
 dependencies {
 	//spring系
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:12.0.0")
-	implementation("com.graphql-java-kickstart:graphql-java-tools:12.0.0")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+	//dgs
+	implementation(platform("com.netflix.graphql.dgs:graphql-dgs-platform-dependencies:latest.release"))
+	implementation("com.netflix.graphql.dgs:graphql-dgs-spring-boot-starter")
+	implementation("com.netflix.graphql.dgs:graphql-dgs-extended-scalars")
+	implementation("com.netflix.graphql.dgs:graphql-dgs-subscriptions-websockets-autoconfigure:latest.release")
+
 
 	//coroutines
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
@@ -42,12 +48,15 @@ dependencies {
 	//test系
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework:spring-webflux")
-	testImplementation("org.springframework.graphql:spring-graphql-test")
-	testImplementation("org.springframework.security:spring-security-test")
 
 	//kotest
 	testImplementation("io.kotest:kotest-runner-junit5-jvm:5.1.0")
 	testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.0")
+}
+
+tasks.withType<com.netflix.graphql.dgs.codegen.gradle.GenerateJavaTask> {
+	generateClient = true
+	packageName = "com.example.springgraphqlapp.generated"
 }
 
 tasks.withType<KotlinCompile> {
@@ -59,4 +68,11 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+	testLogging {
+		events(FAILED, STANDARD_ERROR, SKIPPED)
+		exceptionFormat = FULL
+		showExceptions = true
+		showCauses = true
+		showStackTraces = true
+	}
 }

@@ -5,6 +5,8 @@ import com.example.springgraphqlapp.application.tool.MorphologicalAnalysisManage
 import com.example.springgraphqlapp.domain.model.Token
 import com.example.springgraphqlapp.domain.repository.MorphologicalAnalysisResultRepository
 import com.example.springgraphqlapp.domain.repository.TextIndexRepository
+import com.example.springgraphqlapp.generated.types.MorphologicalAnalysisResult
+import com.example.springgraphqlapp.generated.types.TextIndex
 import com.example.springgraphqlapp.infrastructure.entity.MorphologicalAnalysisResultEntity
 import com.example.springgraphqlapp.infrastructure.entity.TextIndexEntity
 import org.bson.types.ObjectId
@@ -57,6 +59,26 @@ class TextIndexService(
         textIndexRepository.save(textIndex)
 
         return wordCountMap.size
+    }
+
+    /**
+     * textIndexを取得する
+     */
+    fun getTextIndex(id: ObjectId): TextIndex {
+        val entity = textIndexRepository.findOneByTextIndexId(id)
+        return TextIndex(
+            id.toString(),
+            entity.mainText,
+            entity.textCount.toInt(),
+            entity.morphologicalAnalysisResults.map {
+                MorphologicalAnalysisResult(
+                    it.morphologicalId.toString(),
+                    it.word,
+                    it.partOfSpeech,
+                    it.count.toInt()
+                )
+            }
+        )
     }
 }
 
